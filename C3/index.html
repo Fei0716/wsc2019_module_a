@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body{
+            margin: 2rem;
+            background-color: #f4f4ff;
+            height: 100dvh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        #canvas {
+            border: 2px solid black;
+        }
+        #color-picker{
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        label:nth-of-type(1){
+            display: block;
+            height: 20px;
+            width: 20px;
+            background-color: black;
+        }
+        label:nth-of-type(2){
+            display: block;
+            height: 20px;
+            width: 20px;
+            background-color: red;
+        }
+        label:nth-of-type(3){
+            display: block;
+            height: 20px;
+            width: 20px;
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+<div id="color-picker">
+    <div>Choose a color</div>
+    <label for="black"></label>
+    <input type="radio" name="color" id="black" value="black">
+    <label for="red"></label>
+    <input type="radio" name="color" id="red" value="red">
+    <label for="blue"></label>
+    <input type="radio" name="color" id="blue" value="blue">
+</div>
+    <canvas id="canvas" width="500" height="500">
+
+    </canvas>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded' , () => {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const color = document.querySelectorAll('input[name="color"]');
+            //states
+            let isDrawing = false;
+            let lastX = 0;
+            let lastY = 0;
+            let strokeStyle = '#000000';
+            canvas.addEventListener('mousedown' , (e)=>{
+                lastX = e.offsetX;
+                lastY= e.offsetY;
+                isDrawing = true;
+            });
+
+            canvas.addEventListener('mousemove' , (e)=> {
+                if (!isDrawing) {
+                    return;
+                }
+
+                let x = e.offsetX;
+                let y = e.offsetY;
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(x, y);
+                ctx.lineJoin = "round";
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = strokeStyle;
+                ctx.stroke();
+                ctx.closePath();
+
+                lastX = x;
+                lastY = y;
+            })
+            canvas.addEventListener('mouseup' , (e)=> {
+                isDrawing = false;
+            })
+
+
+            color.forEach((c)=>{
+                c.addEventListener('change' , ()=>{
+                    console.log(c.value);
+                    strokeStyle = c.value;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

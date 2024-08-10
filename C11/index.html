@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100dvh;
+            flex-direction: column;
+        }
+        #canvas{
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+    <canvas width="400" height="320" id="canvas">
+
+    </canvas>
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        const canvas  = document.querySelector('#canvas');
+        const ctx = canvas.getContext('2d');
+
+
+        class Ball{
+            constructor() {
+                this.r = 20;
+                this.cx = 20;
+                this.cy = canvas.height / 2;
+            }
+            draw(){
+                ctx.beginPath();
+                ctx.fillStyle = 'white';
+                ctx.arc(this.cx , this.cy , this.r , 0 ,  2 * Math.PI);
+                ctx.fill();
+            }
+        }
+
+        const ball = new Ball();
+        function loop(t){
+            ctx.clearRect(0 ,0, canvas.width, canvas.height);
+            ball.draw();
+            if(ball.cx < canvas.width + 20){
+                ball.cx += 1 * 0.5;
+            }else{
+               ball.cx =20;
+            }
+            requestAnimationFrame(loop)
+        }
+
+
+        requestAnimationFrame(loop);
+    });
+</script>
+</body>
+</html>

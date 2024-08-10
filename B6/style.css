@@ -1,0 +1,40 @@
+/*CSS RESET*/
+
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/*PUT YOUR CSS CODE HERE*/
+
+body{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100dvh;
+	width: 100%;
+}
+#block{
+	width: 100px;
+	height: 100px;
+	background-color: transparent;
+	border: 50px solid blue;
+	border-top-color: transparent;
+	border-left-color: transparent;
+	border-right-color: transparent;
+	border-bottom-width: 75px;
+
+	animation: loop 2s ease infinite;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	/*clip-path: polygon(50px 0, 100px 100px, 0 100px);*/
+}
+@keyframes loop{
+	50%{
+		border-color: yellow;
+		border-bottom-width: 50px;
+		/*clip-path: polygon(0 0,  100px 0 ,100px 100px, 0 100px);*/
+	}
+}

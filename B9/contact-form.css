@@ -1,0 +1,67 @@
+body {
+    font-family: "Arial";
+    color: #333333;
+    max-width: min(1400px, 90%);
+    margin: 0 auto;
+}
+
+.form__fieldwrap {
+    margin-bottom: 40px;
+}
+
+.form__input {
+    box-sizing: border-box;
+    width: 100%;
+    border: 1px solid #4a4a4a;
+    background-color: transparent;
+    font-weight: 400;
+    font-size: 1em;
+    line-height: 1.5em;
+    border-radius: 0;
+    padding-top: .7em;
+    padding-bottom: .7em;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-family: inherit;
+    outline: none;
+}
+.form__fieldset{
+    border-style: dotted;
+    border-color: black;
+    margin-bottom: 2rem;
+}
+.form__input:focus {
+    outline: 3px solid #000000;
+}
+
+
+#form-user{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+#form-subject{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+.form__fieldwrap{
+    margin-bottom: 1rem;
+}
+.btn{
+    border: none;
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    border-radius: 0.25rem;
+}
+.btn-primary{
+    color: white;
+    background-color: black;
+}
+.btn-secondary{
+    color: #191919;
+    background-color: #cacaca;
+}
+.form__fieldwrap--submit button{
+    width: 100%;
+}

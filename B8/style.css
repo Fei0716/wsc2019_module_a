@@ -1,0 +1,53 @@
+/*CSS RESET*/
+
+*{
+	margin: 0;
+	padding: 0;
+}	
+
+/*PUT YOUR CODE CSS HERE*/
+
+body{
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+}
+
+#block{
+	width: 600px;
+	height: 500px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-bottom: 5px solid green;
+	position: relative;
+	background: skyblue;
+}
+
+.ball{
+	position: absolute;
+	width: 50px;
+	height: 50px;
+	bottom: 300px;
+	border-radius: 50%;
+	background: red;
+	animation: bouncing 4s ease-in-out infinite;
+}
+
+@keyframes bouncing {
+	0%,100%{
+		bottom: 300px;
+	}
+	25%{
+		bottom: 0;
+	}
+	50%{
+		bottom: 350px;
+	}
+	75%{
+		bottom:0;
+	}
+
+}

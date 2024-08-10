@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        main{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100dvh;
+        }
+        .loading-container{
+            display: grid;
+            grid-template-columns: repeat(2 , 50px);
+            grid-template-rows: repeat(2, 50px);
+            gap: 50px;
+        }
+        .loading-circle{
+            border-radius: 100%;
+            width: 100%;
+            height: 100%
+        }
+        .loading-circle:nth-of-type(1){
+            background-color: #19A68C;
+            animation: loadingAnimation1 3s ease infinite;
+        }
+        @keyframes loadingAnimation1{
+            0%{
+                transform: translateX(0%) translateY(0%);
+            }
+            25%{
+                transform: translateX(100px) translateY(0);
+            }
+
+            50%{
+                transform: translateX(100px) translateY(100px);
+            }
+
+            75%{
+                transform: translateX(0) translateY(100px);
+            }
+        }
+        .loading-circle:nth-of-type(2){
+            background-color: #F63D3A;
+            animation: loadingAnimation2 3s ease infinite;
+        }
+        @keyframes loadingAnimation2{
+            0%{
+                transform: translateX(0%) translateY(0);
+            }
+            25%{
+                transform: translateX(0) translateY(100px);
+            }
+
+            50%{
+                transform: translateX(-100px) translateY(100px);
+            }
+            75%{
+                transform: translateX(-100px) translateY(0);
+            }
+        }
+        .loading-circle:nth-of-type(3){
+            background-color: #FDA543;
+            animation: loadingAnimation3 3s ease infinite;
+        }
+        @keyframes loadingAnimation3{
+            0%{
+                transform: translateX(0%) translateY(0);
+            }
+            25%{
+                transform: translateX(0) translateY(-100px);
+            }
+
+            50%{
+                transform: translateX(100px) translateY(-100px);
+            }
+            75%{
+                transform: translateX(100px) translateY(0);
+            }
+        }
+        .loading-circle:nth-of-type(4){
+            background-color: #193B48;
+            animation: loadingAnimation4 3s ease infinite;
+        }
+        @keyframes loadingAnimation4{
+            0%{
+                transform: translateX(0) translateY(0);
+            }
+            25%{
+                transform: translateX(-100px) translateY(0);
+            }
+            50%{
+                transform: translateX(-100px) translateY(-100px);
+            }
+            75%{
+                transform: translateX(0) translateY(-100px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="loading-container">
+            <div class="loading-circle"></div>
+            <div class="loading-circle"></div>
+            <div class="loading-circle"></div>
+            <div class="loading-circle"></div>
+        </div>
+    </main>
+</body>
+</html>

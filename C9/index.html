@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100dvh;
+            flex-direction: column;
+        }
+
+    </style>
+</head>
+<body>
+<form action="#" id="form-1">
+    <div id="message">
+
+    </div>
+    <div>
+        <label for="name">Spending Name</label>
+        <input type="text" name="name" id="name">
+    </div>
+
+    <div>
+        <label for="cost">Cost</label>
+        <input type="number" name="cost" id="cost">
+    </div>
+
+    <div>
+        <button type="submit">Add</button>
+    </div>
+
+    <ol id="inputs">
+
+    </ol>
+</form>
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        const form  = document.querySelector('#form-1');
+        const name = document.querySelector('#name');
+        const cost  = document.querySelector('#cost');
+        const message  = document.querySelector('#message');
+        const inputs  = document.querySelector('#inputs');
+
+        form.addEventListener('submit' , function(e){
+            e.preventDefault();
+            if(!name.value || !cost.value){
+                message.innerHTML = '<strong>There was an error</strong>'
+                setTimeout(()=>{
+                    message.innerHTML = '';
+                    form.reset();
+                }, 3000);
+                return;
+            }
+
+            message.innerHTML = '<strong>Correct</strong>'
+            let nameVal = name.value;
+            let costVal = cost.value;
+            setTimeout(()=>{
+                message.innerHTML = '';
+                form.reset();
+            }, 3000);
+
+            inputs.innerHTML = `
+                  <li>${nameVal}</li>
+                  <li>${costVal}</li>
+            `;
+
+        })
+
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Clock</title>
+
+    <style>
+        /*CSS RESET*/
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /*PUT YOUR CSS CODE HERE*/
+
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100dvh;
+            width: 100%;
+        }
+    </style>
+
+</head>
+<body>
+
+    <canvas id="canvas" width="500" height="500">
+
+    </canvas>
+
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        const canvas = document.querySelector('#canvas');
+        const ctx = canvas.getContext('2d');
+        //////////remap position (0,0) to the center of the canvas;
+        ctx.translate(250,250);
+
+        let date = new Date();
+        let rotateDegree = 0;
+
+        // Create the radial gradient
+        const gradient1 = ctx.createRadialGradient(0, 0, 220, 0, 0, 250);
+        gradient1.addColorStop(0, 'rgba(142, 142, 142, 0.7)');  // Inner color
+        gradient1.addColorStop(0.7, '#b5b5b5');     // Middle color
+        gradient1.addColorStop(1, 'rgba(142, 142, 142, 0.7)'); // Outer color
+
+
+        class Clock{
+            constructor() {
+                this.hour = date.getHours() > 12? date.getHours() - 12  : date.getHours();
+                this.minute = date.getMinutes();
+                this.second = date.getSeconds();
+            }
+            draw(){
+                date = new Date();
+                this.hour = date.getHours() > 12? date.getHours() - 12  : date.getHours();
+                this.minute = date.getMinutes();
+                this.second = date.getSeconds();
+
+                //draw the clock frame
+                //outer frame
+                ctx.beginPath();
+                ctx.fillStyle = gradient1;
+                ctx.arc(0 ,0 , 250, 0 , 2 * Math.PI);
+                ctx.fill();
+                ctx.closePath();
+
+                //inner frame
+                ctx.beginPath();
+                ctx.fillStyle = gradient1;
+                ctx.arc(0 ,0 , 220, 0 , 2 * Math.PI);
+                ctx.fill();
+                ctx.closePath();
+
+                //draw the clock's white background
+                ctx.beginPath();
+                ctx.fillStyle = 'white';
+                ctx.arc(0 ,0 , 200, 0 , 2 * Math.PI);
+                ctx.fill();
+                ctx.closePath();
+
+                //draw the labels on the background
+                rotateDegree = 0;
+                for(let i = 0; i < 60; i++){
+                    if(i=== 0  || i % 5 === 0){
+                        //draw thicc label
+                        ctx.save();
+                        ctx.rotate(rotateDegree * Math.PI / 180)
+                        ctx.beginPath();
+                        ctx.fillStyle  = '#000000';
+                        ctx.rect(-10/2 , -190 , 10 , 30);
+                        ctx.fill();
+                        ctx.restore();
+                        ctx.closePath();
+
+                    }else{
+                        //draw thin label
+                        ctx.save();
+                        ctx.rotate(rotateDegree * Math.PI / 180)
+                        ctx.beginPath();
+                        ctx.fillStyle  = '#000000';
+                        ctx.rect(-6/2 , -190  , 6 , 10);
+                        ctx.fill();
+                        ctx.restore();
+                        ctx.closePath();
+                    }
+
+                    rotateDegree += 360/60;
+                }
+
+                //draw the hour hand
+                rotateDegree = this.hour * 60/12 * 360/60;
+                ctx.save();
+                ctx.rotate( rotateDegree * Math.PI/ 180  );
+                ctx.beginPath();
+                ctx.fillStyle = "#000000";
+                ctx.rect(-20/2 , 30, 20 , -150);
+                ctx.fill();
+                ctx.restore();
+                ctx.closePath();
+
+
+                //draw the minute hand
+                rotateDegree = this.minute  * 360/60;
+                ctx.save();
+                ctx.rotate(rotateDegree * Math.PI / 180);
+                ctx.beginPath();
+                ctx.fillStyle = "#000000";
+                ctx.rect(-20/2 , 30 , 20 ,-215);//move rect to the center of the circle
+
+                ctx.fill();
+                ctx.restore();
+                ctx.closePath();
+
+
+                //draw the second hand
+                rotateDegree = this.second * 360/60;
+                ctx.save();
+                ctx.rotate(rotateDegree * Math.PI / 180);
+                ctx.beginPath();
+                ctx.fillStyle = "#ff0000";
+                ctx.rect(-8/2 , 30, 8 , -150);
+                ctx.fill();
+                ctx.restore();
+                ctx.closePath();
+
+                //draw the red circle at the centre
+                ctx.beginPath();
+                ctx.fillStyle = "#ff0000";
+                ctx.arc( 0, 0, 10, 0 , 2 * Math.PI);
+                ctx.fill();
+                ctx.closePath();
+
+                //draw the red circle at the head of the second's hand
+                rotateDegree = this.second * 360/60;
+                ctx.save()
+                ctx.rotate(rotateDegree * Math.PI /180);
+                ctx.beginPath();
+                ctx.fillStyle = "#ff0000";
+                ctx.arc( 0, -120, 15, 0 , 2 * Math.PI);
+                ctx.fill();
+                ctx.restore();
+                ctx.closePath();
+            }
+        }
+        let clock = new Clock();
+        let timestamp = 0;
+        function loop(t){
+            if(Math.floor(t - timestamp) >= 1000){//update the clock every second
+                ctx.clearRect( 0, 0, canvas.width, canvas.height);
+                clock.draw();
+                timestamp = t;
+            }
+            requestAnimationFrame(loop)
+
+        }
+        requestAnimationFrame(loop)
+    });
+
+
+
+</script>
+
+</body>
+</html>
