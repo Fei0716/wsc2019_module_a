@@ -5,7 +5,7 @@
       <paths name="Centos Web Server">
         <serverdata>
           <mappings>
-            <mapping deploy="/wsc2019_module_a" local="$PROJECT_DIR$" web="/192.168.10.2/wsc_module_a" />
+            <mapping deploy="/wsc2019_module_a/R2" local="$PROJECT_DIR$" web="/192.168.10.2/wsc_module_a" />
           </mappings>
         </serverdata>
       </paths>

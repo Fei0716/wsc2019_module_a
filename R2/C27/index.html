@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        :root{
+            --left: red;
+            --right: blue;
+        }
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100dvh;
+        }
+        #square{
+            height: 300px;
+            width: 300px;
+            background-image: linear-gradient(to right, var(--left), var(--right));
+        }
+        #left-buttons, #right-buttons{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        input{
+            margin: 1rem;
+        }
+        button{
+            display: block;
+            width: 10px;
+            height: 10px!important;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="left-inputs">
+        <input type="text" name="left" id="left">
+        <div id="left-buttons">
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+        </div>
+
+    </div>
+    <div id="square">
+
+    </div>
+    <div id="right-inputs">
+        <input type="text" name="right" id="right">
+        <div id="right-buttons">
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+        </div>
+
+    </div>
+<script>
+    const square = document.querySelector('#square');
+    const inputLeft = document.querySelector('#left');
+    const inputRight = document.querySelector('#right');
+    const leftButtons = document.querySelector('#left-buttons');
+    const rightButtons = document.querySelector('#right-buttons');
+
+    let randomColor;
+    //populate random colors to each of the buttons
+    leftButtons.querySelectorAll('button').forEach((el) =>{
+        randomColor = getRandomHexColor();
+        el.style.backgroundColor = randomColor;
+        el.setAttribute('data-color', randomColor);
+
+        //add click event
+        el.addEventListener("click", (e)=>{
+            inputLeft.value = e.target.getAttribute('data-color');
+            inputLeft.dispatchEvent(new Event("input"));
+        });
+    });
+    //populate random colors to each of the buttons
+    rightButtons.querySelectorAll('button').forEach((el) =>{
+        randomColor = getRandomHexColor();
+        el.style.backgroundColor = randomColor;
+        el.setAttribute('data-color', randomColor);
+
+        //add click event
+        el.addEventListener("click", (e)=>{
+            inputRight.value = e.target.getAttribute('data-color');
+            inputRight.dispatchEvent(new Event("input"));
+        });
+    });
+
+    function getRandomHexColor(){
+        const randomInt = Math.floor(Math.random() * 16777215);// between 0 and 0xFFFFFF
+        return `#${randomInt.toString(16).padStart(6, '0')}`;
+    }
+    inputLeft.addEventListener('input' , (e)=>{
+        let input = e.target.value.toString();
+
+        console.log(/^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(e.target.value.toString()));
+        //check for validity of hex value
+        if(!/^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(e.target.value.toString()))return;
+        //change the value of --left
+        square.style.cssText= `--left: ${input}`;
+
+    });
+
+    inputRight.addEventListener('input' , (e)=>{
+        let input = e.target.value.toString();
+
+        console.log(/^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(e.target.value.toString()));
+        //check for validity of hex value
+        if(!/^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(e.target.value.toString()))return;
+        //change the value of --left
+        square.style.cssText= `--right: ${input}`;
+
+    });
+</script>
+</body>
+</html>

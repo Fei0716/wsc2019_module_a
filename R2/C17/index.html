@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        :root{
+            --delay: 0;
+        }
+        body{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100dvh;
+        }
+        main{
+            display: grid;
+            grid-template-rows: repeat(3, calc(1080px / 3));
+            grid-template-columns: repeat(5, calc(1920px / 5));
+        }
+        .col{
+            background-color: grey;
+        }
+        .disappear{
+            animation: disappearAnimation 1s ease forwards;
+            animation-delay: var(--delay);
+        }
+        @keyframes disappearAnimation {
+            to{
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="col"></div>
+        <div class="col"></div>
+        <div class="col"></div>
+        <div class="col"></div>
+        <div class="col"></div>
+
+        <div class="col"></div>
+        <div class="col"></div>
+        <div class="col"></div>
+        <div class="col"></div>
+        <div class="col"></div>
+
+        <div class="col"></div>
+        <div class="col"></div>
+        <div class="col"></div>
+        <div class="col"></div>
+        <div class="col"></div>
+    </main>
+
+    <script>
+        const cols = document.querySelectorAll('.col');
+        let currentRows = -1;
+        cols.forEach((c, i)=>{
+            if(i % 5 === 0){
+                currentRows++;
+            }
+            c.style.backgroundImage = "url('./image.jpg')";
+            c.style.backgroundPosition = `calc(-${i} * 1920px / 5) calc(-${currentRows} * 1080px / 3)`;
+
+            //add animation
+            c.style.animationDelay = `${i * 0.2}s`;
+            c.classList.add("disappear");
+        });
+    </script>
+</body>
+</html>

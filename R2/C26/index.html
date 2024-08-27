@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            padding: 20px;
+            position: relative; /* Ensure circles are positioned relative to the body */
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .circle {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: grey;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+
+    let texts = "Home,About,Contact,Map,Privacy";
+    generateCircles();
+
+    function generateCircles() {
+        let arr = texts.split(",");
+        let coordinates = [];
+
+        for (let t of arr) {
+            let size = Math.floor(Math.random() * (400 - 300 + 1) + 300);
+            let x, y;
+            let isOverlapping;
+
+            do {
+                // Generate random x and y coordinates within the window boundaries
+                x = Math.floor(Math.random() * (window.innerWidth - size));
+                y = Math.floor(Math.random() * (window.innerHeight - size));
+
+                // Check for overlap with any existing circles
+                isOverlapping = coordinates.some((c) => {
+                    const dx = c.x - x;
+                    const dy = c.y - y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    return distance < (c.size / 2 + size / 2);
+                });
+            } while (isOverlapping);  // Repeat until no overlap is found
+
+            // Create the circle
+            let circle = document.createElement('div');
+            circle.classList.add('circle');
+            circle.style.cssText = `left:${x}px; top: ${y}px; width: ${size}px; height:${size}px`;
+            circle.innerHTML = `<div>${t}</div>`;
+            document.querySelector('body').append(circle);
+
+            // Store the coordinates and size for overlap checking
+            coordinates.push({ x, y, size });
+        }
+    }
+</script>
+</body>
+</html>
