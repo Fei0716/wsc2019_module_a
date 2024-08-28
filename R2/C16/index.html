@@ -3,13 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <title>C16</title>
+
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        :root{
+            --color-1:   #20c997;
+            --color-2: #007653;
+        }
+        body{
+            height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        #smiley{
+            width: 400px;
+            height: 400px;
+            border: 10px solid var(--color-1);
+            background-color: var(--color-2);
+            position: relative;
+            border-radius: 100%;
+            transition: all .4s ease;
+        }
+        #smiley::before,#smiley::after{
+            position: absolute;
+            content: "";
+            height: 50px;
+            width: 50px;
+            background-color: var(--color-1);
+            border-radius: 100%;
+
+        }
+        #smiley::before{
+            left: 25%;
+            top: 30%;
+        }
+        #smiley::after{
+            right: 25%;
+            top: 30%;
+        }
+        #mouth{
+            position: absolute;
+            bottom: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            background-color: transparent;
+            border: 20px solid var(--color-1);
+            transition: all .4s ease;
+            border-bottom-right-radius: 100%;
+            border-bottom-left-radius: 100%;
+        }
+        #mouth.normal{
+            animation: normalAnimation .5s ease forwards;
+        }
+        #mouth.sad{
+            animation: sadAnimation .5s ease forwards;
+        }
+        #smiley:has(>.normal){
+            --color-1: #848400;
+            --color-2: #f3f317;
+        }
+
+        #smiley:has(>.sad){
+            --color-1: #a53e3e;
+            --color-2: #ff7b7b;
+        }
+        @keyframes normalAnimation {
+            from{
+                border-top-right-radius: 0;
+                border-top-left-radius: 0;
+                border-bottom-right-radius: 100%;
+                border-bottom-left-radius: 100%;
+            }
+            to{
+                border-top-right-radius: 100%;
+                border-top-left-radius: 100%;
+                border-bottom-right-radius: 100%;
+                border-bottom-left-radius: 100%;
+                --color-1: #848400;
+                --color-2: #f3f317;
+            }
+        }
+        @keyframes sadAnimation {
+            to{
+                border-top-right-radius: 100%;
+                border-top-left-radius: 100%;
+                border-bottom-right-radius: 0;
+                border-bottom-left-radius: 0;
+                --color-1: #a53e3e;
+                --color-2: #ff7b7b;
+            }
+        }
+
+        #btn-group{
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+    </style>
 </head>
 <body>
+    <main id="smiley">
+        <div id="mouth">
 
+        </div>
+    </main>
+    <div id="btn-group">
+        <button id="btn-smile">
+            Smile
+        </button>
+
+        <button id="btn-normal">
+            Normal
+        </button>
+
+        <button id="btn-sad">
+            Sad
+        </button>
+    </div>
 
 <script>
+    const smiley = document.querySelector("#smiley");
+    const mouth = document.querySelector("#mouth");
+    const btnSmile = document.querySelector("#btn-smile");
+    const btnNormal = document.querySelector("#btn-normal");
+    const btnSad = document.querySelector("#btn-sad");
 
+    btnSmile.addEventListener("click", ()=>{
+        if(mouth.classList.contains('normal'))
+        mouth.classList.remove('normal');
 
+        if(mouth.classList.contains('sad'))
+        mouth.classList.remove('sad');
+    })
+    btnNormal.addEventListener("click", ()=>{
+        if(mouth.classList.contains('sad'))
+            mouth.classList.remove('sad');
+        mouth.classList.add('normal');
+    })
+
+    btnSad.addEventListener("click", ()=>{
+        if(mouth.classList.contains('normal'))
+            mouth.classList.remove('normal');
+        mouth.classList.add('sad');
+    })
 </script>
 </body>
 </html>

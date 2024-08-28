@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body{
+            height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        textarea{
+            display: block;
+            margin: 0 auto;
+        }
+        .keyboard{
+            display: flex;
+            width: 1000px;
+            gap: 0.25rem;
+            flex-direction: column;
+        }
+        .row{
+            display: flex;
+            gap: 0.25rem;
+        }
+        .col{
+            height: 70px;
+            border-radius: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            background-color: #c8c8c8;
+            cursor: pointer;
+            flex: 1 1 auto;
+            flex-direction: column;
+            padding: 1rem;
+            font-weight: bold;
+            font-size: 1.25rem;
+            border: 2px solid transparent;
+            transition: all .4s ease;
+        }
+        .row:has(.col-end){
+            justify-content: flex-end;
+
+        }
+        .col-end{
+            width: 100px!important;
+            flex-grow: 0;
+        }
+        .col-big{
+            flex-basis: 100px;
+        }
+        .row:has(.col-extra-big){
+            justify-content: center;
+        }
+        .col-extra-big{
+            flex-basis: calc(8 * 50px);
+            flex-grow: 0;
+        }
+        .stroke-highlight{
+            border-color: #ff5757;
+        }
+    </style>
+</head>
+<body>
+<!--    keyboard here-->
+    <main>
+        <textarea id="input" cols="100" rows="30"></textarea>
+
+        <section class="keyboard">
+            <div class="row">
+                <div class="col col-end "> <span data-key="backspace">Back</span> </div>
+            </div>
+            <div class="row">
+                <div class="col"> <span data-key="q">Q</span> </div>
+                <div class="col"> <span data-key="w">W</span> </div>
+                <div class="col"> <span data-key="e">E</span> </div>
+                <div class="col"> <span data-key="r">R</span> </div>
+                <div class="col"> <span data-key="t">T</span> </div>
+                <div class="col"> <span data-key="y">Y</span> </div>
+                <div class="col"> <span data-key="u">U</span> </div>
+                <div class="col"> <span data-key="i">I</span> </div>
+                <div class="col"> <span data-key="o">O</span> </div>
+                <div class="col"> <span data-key="p">P</span> </div>
+                <div class="col col-double">
+                    <span data-key="{">{</span>
+                    <span data-key="[">[</span>
+                </div>
+                <div class="col col-double">
+                    <span data-key="}">}</span>
+                    <span data-key="]">]</span>
+                </div>
+                <div class="col col-double">
+                    <span data-key="|">|</span>
+                    <span data-key="\">\</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col"> <span data-key="a">A</span> </div>
+                <div class="col"> <span data-key="s">S</span> </div>
+                <div class="col"> <span data-key="d">D</span> </div>
+                <div class="col"> <span data-key="f">F</span> </div>
+                <div class="col"> <span data-key="g">G</span> </div>
+                <div class="col"> <span data-key="h">H</span> </div>
+                <div class="col"> <span data-key="j">J</span> </div>
+                <div class="col"> <span data-key="k">K</span> </div>
+                <div class="col"> <span data-key="l">L</span> </div>
+
+                <div class="col col-double">
+                    <span data-key=":">:</span>
+                    <span data-key=";">;</span>
+                </div>
+                <div class="col col-double">
+                    <span data-key='"'>"</span>
+                    <span data-key="'">'</span>
+                </div>
+                <div class="col col-big">
+                    <span data-key="enter">Enter</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col col-big">
+                    <span data-key="shift">Shift</span>
+                </div>
+                <div class="col"> <span data-key="z">Z</span> </div>
+                <div class="col"> <span data-key="x">X</span> </div>
+                <div class="col"> <span data-key="c">C</span> </div>
+                <div class="col"> <span data-key="v">V</span> </div>
+                <div class="col"> <span data-key="b">B</span> </div>
+                <div class="col"> <span data-key="n">N</span> </div>
+                <div class="col"> <span data-key="m">M</span> </div>
+
+                <div class="col col-double">
+                    <span data-key="<"><</span>
+                    <span data-key=",">,</span>
+                </div>
+                <div class="col col-double">
+                    <span data-key='>'> > </span>
+                    <span data-key="."> . </span>
+                </div>
+                <div class="col col-double">
+                    <span data-key="?">?</span>
+                    <span data-key="/">/</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col col-extra-big"> <span data-key="space">Space</span> </div>
+            </div>
+        </section>
+    </main>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            const input = document.querySelector('textarea');
+            const cols = document.querySelectorAll('.col');
+            let keysPressed = [];
+            let shiftPressed = false;
+            let data;
+            let key;
+            let inputValue = '';
+            let id =  1;
+            //add click event listener
+            cols.forEach((c, i)=>{
+                c.addEventListener("click", (e)=>{
+                    inputValue = input.value;
+                    if(document.querySelector('.stroke-highlight:not(:has([data-key="shift"]))')){
+                        document.querySelector('.stroke-highlight').classList.remove('stroke-highlight');
+                    }
+                    e.target.classList.add('stroke-highlight');
+                    if(e.target.classList.contains("col-double")){
+                        //handle double keys
+                        let keys = e.target.querySelectorAll('span');
+                        console.log(keys[0].getAttribute("data-key"))
+                        inputValue += shiftPressed ? keys[0].getAttribute("data-key") : keys[1].getAttribute("data-key");
+                    }else{
+                        //handle single key
+
+                        data = e.target.querySelector('span').getAttribute('data-key');
+                        if(data === 'space'){
+                            inputValue += ' ';
+                        }
+                        else if(data === 'backspace'){
+                            inputValue = inputValue.slice(0, -1); // Remove the last character
+                        }
+                        else if(data === 'enter'){
+                            inputValue += "\n"; // add a new line
+                        }
+                        else if(data === 'shift'){
+                            if(shiftPressed){
+                                shiftPressed = false;
+                                document.querySelector('.col:has([data-key="shift"])').classList.remove("stroke-highlight");
+                            }else{
+                                shiftPressed = true;
+                            }
+                        }
+                        else{
+                            inputValue += shiftPressed ? data.toUpperCase() : data;
+                        }
+
+                        //update input
+                    }
+                    updateInput();
+
+                })
+            });
+
+            input.addEventListener('keydown', (e)=>{
+                keysPressed.push({
+                    'key': e.key,
+                    'id': id++,
+                });
+                if(document.querySelector('.stroke-highlight:not(:has([data-key="shift"]))')){
+                    document.querySelector('.stroke-highlight').classList.remove('stroke-highlight');
+                }
+                if(e.key === 'Shift' || keysPressed.some(k => k.key === "Shift")){
+                    document.querySelector(`.col:has([data-key="shift"])`).classList.add('stroke-highlight');
+                }
+
+                //for normal keys
+                if(e.key === ' '){
+                    document.querySelector(`.col:has([data-key="space"])`).classList.add('stroke-highlight');
+                    //for space key
+
+                }else if(e.key === "Backspace"){
+                    document.querySelector(`.col:has([data-key="backspace"])`).classList.add('stroke-highlight');
+                    //for backspace key
+                }else{
+                    document.querySelector(`.col:has([data-key="${e.key.toLowerCase()}"])`).classList.add('stroke-highlight');
+
+                }
+
+            });
+            input.addEventListener('keyup', (e)=>{
+                //remove shift key from the array
+                if(e.key === "Shift"){
+                    keysPressed.filter((k)=> k.key === "Shift").forEach((k)=>{
+                        keysPressed.splice(keysPressed.findIndex(key=> key.id === k.id, 1));
+                    })
+                }
+
+            });
+            function updateInput(){
+                input.value = inputValue;
+            }
+        });
+    </script>
+</body>
+</html>
