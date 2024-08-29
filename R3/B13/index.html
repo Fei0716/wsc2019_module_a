@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+
+        @property --gradient-left-percentage {
+            syntax: "<percentage>";
+            initial-value: 10%;
+            inherits: false;
+        }
+        @property --gradient-right-percentage {
+            syntax: "<percentage>";
+            initial-value: 40%;
+            inherits: false;
+        }
+
+        body{
+            height: 100dvh;
+            background-image: linear-gradient(to right,  red var(--gradient-left-percentage), blue var(--gradient-right-percentage));
+            animation: shiftGradientAnimation 5s infinite ;
+        }
+        @keyframes shiftGradientAnimation {
+            0%,100%{
+                --gradient-left-percentage:  10%;
+                --gradient-right-percentage:  40%;
+             }
+            50%{
+                --gradient-left-percentage:  60%;
+                --gradient-right-percentage:  100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+<script>
+
+</script>
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body{
+            height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .hide{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <form action="" id="form-csv">
+        <div>
+            <label for="file">Please upload the csv file:</label>
+            <input type="file" name="file" id="file">
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+
+    <h1>Death rates from air pollution, World</h1>
+    <div>Age-standardized death rates from outdoor ozone, particulates, and indoor fuel pollution per 100,000 individuals.</div>
+    <canvas id="graph" width="1000" height="1000" class="hide">
+
+    </canvas>
+
+</main>
+
+<script>
+    const fileInput = document.querySelector("#file");
+    const formCsv = document.querySelector("#form-csv");
+    const graphCanvas = document.querySelector("#graph");
+    const ctx = graphCanvas.getContext("2d");
+
+    fileInput.click();
+
+    //move the starting point of canvas to near the bottom left corner
+    ctx.translate( 50, graphCanvas.height -50);
+
+    let csvFile;
+    let text;
+    let headers = [
+        "Entity",
+        "Code",
+        "Year",
+        "Ozone pollution (deaths per 100,000)",
+        "Household pollution from solid fuels (deaths per 100,000)",
+        "Outdoor particulate matter (deaths per 100,000)"
+    ];
+    let data = [];//store the array of data
+    let years = [];
+    let stats = [];
+    fileInput.addEventListener("change", (e)=>{
+        csvFile = e.target.files[0];
+    });
+    formCsv.addEventListener("submit" , (e)=>{
+        e.preventDefault();
+
+        //hide the form
+        formCsv.classList.add("hide");
+        readCsvFile();
+    })
+
+
+    function readCsvFile(){
+        let fileReader = new FileReader();
+        fileReader.onload  = (e) =>{
+            let text  = e.target.result;
+            let columns;
+            const rows = text.split("\n");
+            rows.forEach((r , i)=>{
+                columns = r.split(",");
+                if(i > 0){
+                    data.push({
+                        "Entity" : columns[0],
+                        "Code" : columns[1],
+                        "Year" : columns[2],
+                        "Ozone" : columns[3],
+                        "Household" : columns[4],
+                        "Outdoor" : columns[5],
+                    });
+                }
+            });
+
+            analyseData();
+        };
+        fileReader.readAsText(csvFile);
+    }
+
+
+    function analyseData(){
+        //sort the data by year ascending order
+        data.sort((a , b)=> {
+            return a.Year - b.Year;
+        });
+
+        //generate an array of years
+        data.forEach((d)=>{
+           if(years.some(y => y === d.Year || isNaN(d.Year)))return;
+           //else add to the array
+            years.push(d.Year);
+        });
+
+        let yearData = [];
+        let averageOzone = 0;
+        let averageOutdoor = 0;
+        let averageHousehold = 0;
+        //calculate the averages for each of the years
+        years.forEach((y)=>{
+            yearData = data.filter((d)=> d.Year === y);
+            yearData.forEach(( d, i )=>{
+                averageOzone += parseFloat(d.Ozone);
+                averageOutdoor += parseFloat(d.Outdoor);
+                averageHousehold += parseFloat(d.Household);
+            });
+            averageOzone /= yearData.length;
+            averageOutdoor /= yearData.length;
+            averageHousehold /= yearData.length;
+
+            stats.push({
+                'Year': y,
+                'AverageOzone': averageOzone,
+                'AverageOutdoor' : averageOutdoor,
+                'AverageHousehold' : averageHousehold,
+            });
+
+        });
+        drawGraph();
+    }
+
+    function drawGraph(){
+        //draw the x-axis
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(graphCanvas.width - 100, 0);
+        ctx.strokeStyle = "#FFFFFFF";
+        ctx.strokeWidth = "5";
+        ctx.stroke();
+        ctx.closePath();
+        //draw the y-axis;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, -graphCanvas.height + 100);
+        ctx.strokeStyle = "#FFFFFFF";
+        ctx.strokeWidth = "5";
+        ctx.stroke();
+        ctx.closePath();
+        //draw the labels on x-axis;
+        let distanceLabelX =  (graphCanvas.width - 100 )/ years.length;
+        let counter = 0;
+        for(let y of years){
+            //draw the label
+            ctx.font = "12px Arial";
+            ctx.fillText(y.toString(), counter * distanceLabelX, 16);
+            counter++;
+        }
+
+        //draw the labels on y-axis;
+        let highestAverage = 0;
+
+        stats.forEach((s)=>{
+            if(s.AverageOzone > highestAverage){
+                highestAverage = s.AverageOzone;
+            }
+            if(s.AverageHousehold > highestAverage){
+                highestAverage = s.AverageHousehold;
+            }
+            if(s.AverageOutdoor > highestAverage){
+                highestAverage = s.AverageOutdoor;
+            }
+        });
+
+
+        // console.log(highestAverage);
+        let distanceLabelY =  (graphCanvas.height - 100 ) / 7;//increment by 10
+        for(let i = 0 ; i <= 7; i++){
+            //draw the label
+            ctx.font = "12px Arial";
+            ctx.fillText((i * 10).toString(), -16, (-i * distanceLabelY ) + 16);
+        }
+
+
+
+        //household pollution
+        let lastX = 0;
+        let lastY = 0;
+        let firstY = 0;
+        counter = 0;
+        // Start drawing the path
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "black";
+        ctx.fillStyle = "black";
+
+        // Iterate over the stats
+        for (let s of stats) {
+            const currentX = counter * distanceLabelX;
+            const currentY = - (s.AverageHousehold / 7 * distanceLabelY);
+
+            if (counter === 0) {
+                firstY = currentY;
+                // Move to the first point
+                ctx.moveTo(currentX, currentY);
+            } else {
+                // Draw a line to the current point
+                ctx.lineTo(currentX, currentY);
+            }
+
+            counter++;
+            lastX = currentX;
+            lastY = currentY;
+        }
+        //draw a polygon
+        ctx.lineTo(lastX, 0);
+        ctx.lineTo(0, 0);
+        ctx.lineTo(0, firstY);
+
+        //draw label for this data
+        ctx.font = "10px Arial";
+        ctx.fillText("Household Pollution", lastX + 1 , lastY + 20)
+        // Draw the complete path
+
+        ctx.stroke();
+        ctx.fill();
+
+
+        //outdoor pollution
+        lastX = 0;
+        lastY = 0;
+        firstY = 0;
+        counter = 0;
+        // Start drawing the path
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "black";
+        ctx.fillStyle = "blue";
+
+        // Iterate over the stats
+        for (let s of stats) {
+            const currentX = counter * distanceLabelX;
+            const currentY = - (s.AverageOutdoor / 7 * distanceLabelY);
+
+            if (counter === 0) {
+                firstY = currentY;
+                // Move to the first point
+                ctx.moveTo(currentX, currentY);
+            } else {
+                // Draw a line to the current point
+                ctx.lineTo(currentX, currentY);
+            }
+
+            counter++;
+            lastX = currentX;
+            lastY = currentY;
+        }
+        //draw a polygon
+        ctx.lineTo(lastX, 0);
+        ctx.lineTo(0, 0);
+        ctx.lineTo(0, firstY);
+
+        //draw label for this data
+        ctx.font = "10px Arial";
+        ctx.fillText("Outdoor Pollution", lastX + 1 , lastY + 20)
+        // Draw the complete path
+
+
+        ctx.stroke();
+        ctx.fill();
+
+
+
+
+        //ozone pollution
+        lastX = 0;
+        lastY = 0;
+        firstY = 0;
+        counter = 0;
+        // Start drawing the path
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "black";
+        ctx.fillStyle = "red";
+
+        // Iterate over the stats
+        for (let s of stats) {
+            const currentX = counter * distanceLabelX;
+            const currentY = - (s.AverageOzone / 7 * distanceLabelY);
+
+            if (counter === 0) {
+                firstY = currentY;
+                // Move to the first point
+                ctx.moveTo(currentX, currentY);
+            } else {
+                // Draw a line to the current point
+                ctx.lineTo(currentX, currentY);
+            }
+
+            counter++;
+            lastX = currentX;
+            lastY = currentY;
+        }
+        //draw a polygon
+        ctx.lineTo(lastX, 0);
+        ctx.lineTo(0, 0);
+        ctx.lineTo(0, firstY);
+        //draw label for this data
+        ctx.font = "10px Arial";
+        ctx.fillText("Ozone Pollution", lastX + 1 , lastY + 20)
+        // Draw the complete path
+        ctx.stroke();
+        ctx.fill();
+
+
+
+
+        //show the graph
+        graphCanvas.classList.remove("hide");
+    }
+</script>
+</body>
+</html>

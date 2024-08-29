@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        :root{
+            --handle-position: 0;
+        }
+        body{
+            background-color: #2a2a2a;
+            color: #c1c1c1;
+            padding: 2rem;
+        }
+        li{
+            list-style: none;
+        }
+        .mb-1{
+            margin-bottom: 1rem!important;
+        }
+        .mb-2{
+            margin-bottom: 2rem!important;
+        }
+        #form-search{
+            width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: .5rem;
+        }
+        #section-video{
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            grid-template-rows: 1fr;
+            gap: 1rem;
+            #video{
+                height: 500px;
+                border-radius: 1rem;
+                background-color: darkgrey;
+                position: relative;
+
+                #video-controls{
+                    position: absolute;
+                    width: 100%;
+                    bottom: 0;
+                    left: 0;
+                    border-bottom-left-radius: 1rem;
+                    border-bottom-right-radius: 1rem;
+                    display: flex;
+                    gap: .5rem;
+                    align-items: center;
+                    padding: 1rem;
+                    background-color: #2a2a2a;
+                }
+
+                button{
+                    font-size: 1rem;
+                }
+                #slider{
+                    position: relative;
+                    flex: 1 1 auto;
+                    background-color: red;
+                    height: 5px;
+                    margin: 1rem;
+                }
+                #slide-control{
+                    position: absolute;
+                    left: var(--handle-position);
+                    top: 50%;
+                    transform :  translateY(-50%);
+                    height: 20px;
+                    width: 20px;
+                    border-radius: 100%;
+                    border: none;
+                }
+            }
+
+            .video-playlist-item{
+                padding: 1rem 0 1rem;
+                border: 2px solid darkgrey;
+                border-radius: 1rem;
+                margin-bottom: .5rem;
+            }
+            .video-playlist-item.video-active{
+                background-color: darkgrey;
+                color: #383838
+            }
+        }
+        #video-title{
+            display: flex;
+            justify-content: space-between;
+        }
+        #video-view{
+            font-size: 1rem;
+            font-weight: normal;
+            font-style: italic;
+        }
+        .comment{
+            padding: 1rem;
+
+        }
+    </style>
+</head>
+<body>
+    <main class="video-interface">
+        <form action="" id="form-search" class="mb-1">
+            <input type="search" name="search" id="search" placeholder="Search for a video">
+            <button type="submit">Search</button>
+        </form>
+
+        <section id="section-video" class="mb-2">
+            <article id="video">
+                <div id="video-controls">
+                    <button id="btn-play" > &triangleright;</button>
+                    <button id="btn-mute" > &#128263;</button>
+                    <button id="btn-volume" > Volume</button>
+
+                    <div id="slider">
+                        <button id="slide-control"></button>
+                    </div>
+                </div>
+            </article>
+            <article id="video-playlist">
+                <ul>
+                    <li class="video-playlist-item video-active">Video 1</li>
+                    <li class="video-playlist-item">Video 2</li>
+                    <li class="video-playlist-item">Video 3</li>
+                    <li class="video-playlist-item">Video 4</li>
+                    <li class="video-playlist-item">Video 5</li>
+                </ul>
+            </article>
+        </section>
+
+        <h1 id="video-title" class="mb-2">EDP Watch #3 <span id="video-view">2 views</span></h1>
+
+        <p id="video-description" class="mb-2">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad doloremque eum eveniet illo sed similique totam voluptas? Aliquid iusto labore, laborum libero, molestias nostrum officia quasi sapiente similique sit unde.
+        </p>
+
+        <section id="comment-section">
+            <h2>Comments</h2>
+
+            <article class="comment comment-pinned">
+                <div>Skibidi Toilet</div>
+                <small>Demarcus Cousins The Third</small>
+            </article>
+
+
+            <article class="comment">
+                <div>Skibidi Toilet</div>
+                <small>Demarcus Cousins The Third</small>
+            </article>
+
+            <article class="comment">
+                <div>Skibidi Toilet</div>
+                <small>Demarcus Cousins The Third</small>
+            </article>
+            <article class="comment">
+                <div>Skibidi Toilet</div>
+                <small>Demarcus Cousins The Third</small>
+            </article>
+            <article class="comment">
+                <div>Skibidi Toilet</div>
+                <small>Demarcus Cousins The Third</small>
+            </article>
+            <article class="comment">
+                <div>Skibidi Toilet</div>
+                <small>Demarcus Cousins The Third</small>
+            </article>
+        </section>
+
+    </main>
+
+<script>
+    const slider = document.querySelector('#slider');
+    const slideControl= document.querySelector('#slide-control');
+
+    slider.addEventListener("pointerdown", (e)=>{
+        e.target.setPointerCapture(e.pointerId);
+        setPosition(e);
+        e.target.addEventListener("pointermove", setPosition);
+        e.target.addEventListener("pointerup", (e)=>{
+            e.target.removeEventListener("pointermove", setPosition);
+            e.target.releasePointerCapture(e.pointerId);
+        });
+    });
+
+    function setPosition(e){
+        let rect  = slider.getBoundingClientRect();
+        let newPosition = (e.offsetX / rect.width) * 100;
+        if(newPosition > 100){
+            newPosition = 100;
+        }else if(newPosition < 0){
+            newPosition = 0;
+        }
+        slideControl.style.setProperty("--handle-position", `${newPosition}%`);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body{
+            background-color: yellow;
+            height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        main{
+            padding: 4rem 5rem;
+        }
+        h1{
+            width: fit-content;
+            margin: 0 auto 2rem;
+            text-align: center;
+
+        }
+        section{
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+
+
+        }
+        .box{
+            border: 2px solid black;
+            padding: 1rem;
+            background-color: white;
+        }
+        @media (min-width: 1440px) {
+            section{
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+            }
+
+        }
+
+    </style>
+</head>
+<body>
+    <main>
+
+        <h1 class="box">Blog Post</h1>
+        <section>
+            <article class="box">
+                <h2>Hello title</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus debitis dignissimos dolorem fugit minus praesentium repellat. A architecto commodi deleniti error est eveniet incidunt, minus, nisi, quisquam ratione sint totam.</p>
+                <a href="">Read more</a>
+            </article>
+            <article class="box">
+                <h2>Hello title</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore doloremque doloribus dolorum eligendi excepturi in ipsa maxime natus necessitatibus nesciunt nostrum obcaecati quae, quam quas qui repellendus sequi tempore voluptates?</p>
+                <a href="">Read more</a>
+            </article>
+            <article class="box">
+                <h2>Hello title</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A adipisci aspernatur consequatur debitis deserunt esse fuga inventore iure laudantium nam, neque omnis provident quod repudiandae sunt unde veniam. Iste, ullam.</p>
+                <a href="">Read more</a>
+            </article>
+            <article class="box">
+                <h2>Hello title</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta id laborum sed velit. Harum omnis reiciendis temporibus ullam voluptatibus. Consequuntur cumque maiores officia vero! Aliquam aut consectetur laudantium nihil? Nisi.</p>
+                <a href="">Read more</a>
+            </article>
+            <article class="box">
+                <h2>Hello title</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab aperiam assumenda at beatae deserunt ducimus eaque excepturi facilis illo illum mollitia non omnis recusandae saepe sed sequi tenetur ut, voluptatum!</p>
+                <a href="">Read more</a>
+            </article>
+            <article class="box">
+                <h2>Hello title</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium at explicabo illo natus quaerat repellat repellendus sed, sit voluptatem voluptates. Alias consectetur consequuntur dolor inventore laborum officia omnis provident sapiente.</p>
+                <a href="">Read more</a>
+            </article>
+
+        </section>
+    </main>
+
+<script>
+
+</script>
+</body>
+</html>
